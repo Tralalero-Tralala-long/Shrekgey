@@ -1,163 +1,129 @@
 import React, { useState } from 'react';
 import { Card3D } from './Card3D';
 import { playPop } from '../utils/audio';
-import { Clock, Eye, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 export const OrwellClock: React.FC = () => {
   const [hour, setHour] = useState<number>(13);
-
-  const isDystopian = hour === 13;
+  const isThirteen = hour === 13;
 
   const toggleHour = () => {
-    playPop(isDystopian ? 440 : 260);
-    setHour(isDystopian ? 12 : 13);
+    playPop();
+    setHour(isThirteen ? 12 : 13);
   };
 
   return (
-    <section id="orwell-clock" className="relative py-24 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
-      {/* Chapter header */}
-      <div className="mb-14">
-        <div className="flex items-center gap-3 text-xs tracking-widest uppercase text-rose-400 font-semibold mb-3">
-          <span>06</span>
-          <span>·</span>
-          <span>The Orwellian Anomaly</span>
-          <span>·</span>
-          <span>Slide 8</span>
-        </div>
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-normal tracking-tight text-white mb-4">
-          One wrong detail <span className="font-serif italic text-rose-400">changes the whole mood.</span>
+    <section id="orwell-clock" className="relative py-16 px-6 md:px-12 lg:px-16 max-w-6xl mx-auto">
+      {/* Clean Main Header */}
+      <div className="mb-10 text-center md:text-left">
+        <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-3 font-serif">
+          One Wrong Detail Changes Everything
         </h2>
-        <p className="text-gray-400 text-lg md:text-xl max-w-2xl leading-relaxed">
-          How George Orwell engineered the most famously disquieting opening line in modern literature using a single impossible number.
+        <p className="text-gray-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+          How George Orwell engineered one of the most famous opening lines in English literature with a single impossible detail.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-12">
-        {/* Left Column: Interactive 3D Clock Display */}
-        <div className="lg:col-span-5">
-          <Card3D depth={20} className="w-full">
-            <div className={`rounded-3xl p-8 border transition-all duration-500 relative overflow-hidden flex flex-col items-center justify-center text-center ${
-              isDystopian
-                ? 'bg-[#150a0d] border-red-500/40 shadow-[0_0_50px_rgba(239,68,68,0.2)]'
-                : 'bg-[#0a111a] border-sky-400/30 shadow-[0_0_30px_rgba(56,189,248,0.1)]'
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        {/* Left: The Analog Clock Face */}
+        <div className="md:col-span-5 flex justify-center">
+          <Card3D depth={14} className="w-full max-w-sm">
+            <div className={`p-8 rounded-3xl border transition-all duration-300 flex flex-col items-center justify-center text-center ${
+              isThirteen
+                ? 'bg-[#150a0d] border-red-500/50 shadow-2xl'
+                : 'bg-[#0a111a] border-sky-400/40 shadow-xl'
             }`}>
-              {/* Dial Container */}
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full border-4 border-white/20 bg-black/40 flex items-center justify-center shadow-inner my-4">
-                {/* Dial numbers */}
+              {/* Dial with 12 numbers and the 13 mark */}
+              <div className="relative w-56 h-56 rounded-full border-4 border-white/20 bg-black/50 flex items-center justify-center shadow-inner my-2">
                 {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n, i) => {
                   const angle = (i * 30 * Math.PI) / 180;
-                  const radius = 100;
+                  const radius = 88;
                   const x = Math.sin(angle) * radius;
                   const y = -Math.cos(angle) * radius;
                   return (
                     <div
                       key={n}
-                      className="absolute text-xs font-mono text-gray-500 font-semibold"
-                      style={{
-                        transform: `translate(${x}px, ${y}px)`,
-                      }}
+                      className="absolute text-xs font-mono text-gray-400 font-semibold"
+                      style={{ transform: `translate(${x}px, ${y}px)` }}
                     >
                       {n}
                     </div>
                   );
                 })}
 
-                {/* 13th hour anomaly badge */}
+                {/* The 13 indicator */}
                 <div
                   onClick={toggleHour}
-                  className={`absolute -top-3 w-12 h-12 rounded-full flex items-center justify-center text-white font-serif font-bold text-lg shadow-xl cursor-pointer transition-all duration-300 ${
-                    isDystopian
-                      ? 'bg-red-600 scale-110 ring-4 ring-red-400/50 animate-pulse'
-                      : 'bg-white/20 hover:bg-white/30 text-gray-300'
+                  className={`absolute -top-3 px-2 py-0.5 rounded-full text-xs font-mono font-bold cursor-pointer transition-all ${
+                    isThirteen
+                      ? 'bg-red-600 text-white ring-2 ring-red-400 scale-110 shadow-lg'
+                      : 'bg-white/20 text-gray-400 hover:text-white'
                   }`}
-                  title="Click to toggle hour between 12 and 13"
+                  title="Click to toggle between 12:00 and 13:00"
                 >
-                  13
+                  13:00
                 </div>
 
-                {/* Clock hands */}
+                {/* Minute hand */}
                 <div
-                  className="absolute w-1 bg-white rounded-full origin-bottom transition-transform duration-700 ease-out"
+                  className="absolute w-1 bg-white rounded-full origin-bottom"
                   style={{
-                    height: '80px',
-                    transform: isDystopian ? 'rotate(390deg)' : 'rotate(360deg)',
+                    height: '68px',
+                    transform: 'rotate(0deg)',
                     bottom: '50%',
                   }}
                 />
+
+                {/* Hour hand */}
                 <div
-                  className="absolute w-1.5 bg-red-500 rounded-full origin-bottom"
+                  className={`absolute w-1.5 rounded-full origin-bottom transition-transform duration-500 ${
+                    isThirteen ? 'bg-red-500' : 'bg-sky-400'
+                  }`}
                   style={{
-                    height: '55px',
-                    transform: 'rotate(90deg)',
+                    height: '48px',
+                    transform: isThirteen ? 'rotate(30deg)' : 'rotate(0deg)',
                     bottom: '50%',
                   }}
                 />
-                <div className="w-4 h-4 rounded-full bg-white z-10 shadow" />
+
+                {/* Center pin */}
+                <div className="w-3 h-3 rounded-full bg-white z-10 shadow" />
               </div>
 
               <button
                 onClick={toggleHour}
-                className="mt-2 text-xs font-mono px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer flex items-center gap-2"
+                className="mt-4 text-xs font-mono px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
               >
-                <Clock className="w-3.5 h-3.5 text-red-400" />
-                <span>Switch to {isDystopian ? 'Normal World (12:00)' : 'Orwellian World (13:00)'}</span>
+                Switch to {isThirteen ? 'Normal (12:00)' : 'Dystopian (13:00)'}
               </button>
             </div>
           </Card3D>
         </div>
 
-        {/* Right Column: Literary Deconstruction */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="liquid-glass border border-white/15 rounded-2xl p-8 bg-[#0c0f18]/80">
-            <div className="text-xs uppercase font-mono tracking-widest text-amber-400 mb-3">
-              Iconic Opening Sentence
-            </div>
-
-            <blockquote className="text-2xl md:text-3xl font-serif text-white leading-relaxed mb-4">
-              “It was a <span className="text-amber-300 font-semibold">bright cold</span> day in April, and the clocks were striking <span className="text-red-500 font-bold underline decoration-red-500/50 underline-offset-4">thirteen</span>.”
+        {/* Right: Literary Analysis */}
+        <div className="md:col-span-7 space-y-5">
+          <div className="liquid-glass border border-white/15 rounded-2xl p-7 bg-[#0c0f18]/80">
+            <blockquote className="text-xl sm:text-2xl font-serif text-white leading-relaxed mb-3">
+              “It was a <span className="text-amber-300 font-semibold">bright cold</span> day in April, and the clocks were striking <span className="text-red-400 font-bold underline">thirteen</span>.”
             </blockquote>
-
             <div className="text-xs text-gray-400 font-mono mb-6">
-              — George Orwell, <em>Nineteen Eighty-Four</em> (1949)
+              — George Orwell, <em>1984</em>
             </div>
 
-            {/* Micro Breakdown of Orwell's Word Choices */}
-            <div className="space-y-4 pt-4 border-t border-white/10">
-              <div className="flex items-start gap-3">
-                <div className="p-1.5 rounded-lg bg-amber-400/10 text-amber-400 mt-0.5">
-                  <span className="font-mono text-xs font-bold">01</span>
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-white">
-                    Oxymoronic Sensory Clash: “bright cold”
-                  </h4>
-                  <p className="text-xs text-gray-400 leading-relaxed mt-0.5">
-                    April promises spring, warmth, and blossoming life. Pairing &apos;bright&apos; with &apos;cold&apos; immediately produces sterile, deceptive sunlight that fails to warm the skin.
-                  </p>
-                </div>
+            <div className="space-y-4 pt-4 border-t border-white/10 text-xs sm:text-sm text-gray-300 leading-relaxed">
+              <div>
+                <strong className="text-amber-300 block mb-1">1. &ldquo;bright cold&rdquo; (Sensory Conflict):</strong>
+                April promises spring warmth and blossoming life. Juxtaposing &quot;bright&quot; with &quot;cold&quot; produces harsh, sterile sunlight that fails to comfort, foreshadowing a deceptive world.
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="p-1.5 rounded-lg bg-red-500/10 text-red-400 mt-0.5">
-                  <span className="font-mono text-xs font-bold">02</span>
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-white">
-                    The Impossible Strike: “thirteen”
-                  </h4>
-                  <p className="text-xs text-gray-400 leading-relaxed mt-0.5">
-                    Clocks strike up to 12. A clock striking thirteen violates physical expectation. It signals 24-hour military control, cold mechanical authoritarianism, and a universe where the rules of reality itself have been warped by Big Brother.
-                  </p>
-                </div>
+              <div>
+                <strong className="text-red-400 block mb-1">2. &ldquo;thirteen&rdquo; (The Anomaly):</strong>
+                Standard clocks strike only up to 12. A clock striking thirteen violates our sense of reality, immediately signaling military 24-hour time and totalitarian state control.
               </div>
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs leading-relaxed flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
-            <span>
-              <strong>The Lesson:</strong> You do not need five paragraphs of setting description. One precisely placed discordant word creates unforgettable thematic atmosphere in a fraction of a second.
-            </span>
+          <div className="p-4 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-200 text-xs leading-relaxed">
+            <strong>IGCSE Takeaway:</strong> You don&apos;t need lengthy description. One precise, unexpected word choice immediately shifts the reader&apos;s perception of the world.
           </div>
         </div>
       </div>

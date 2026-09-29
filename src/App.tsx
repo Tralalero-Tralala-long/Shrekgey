@@ -13,14 +13,11 @@ import { ExamSprint } from './components/ExamSprint';
 import { AnswerKeyPractice } from './components/AnswerKeyPractice';
 import { PresentationCredits } from './components/PresentationCredits';
 import { SlideDeckModal } from './components/SlideDeckModal';
-import { ChatModal } from './components/ChatModal';
 import { GameShowQuiz } from './components/GameShowQuiz';
 import { playPop } from './utils/audio';
 
 export default function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isDeckOpen, setIsDeckOpen] = useState(false);
-  const [activeSlideNumber, setActiveSlideNumber] = useState(1);
 
   // Check if opened as dedicated Quiz tab via ?tab=quiz or #quiz
   const [currentView, setCurrentView] = useState<'main' | 'quiz'>(() => {
@@ -51,7 +48,7 @@ export default function App() {
     };
   }, []);
 
-  // The Orbit painterly space background video URL
+  // Space background video
   const spaceVideoUrl =
     'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4';
   const spacePoster =
@@ -73,7 +70,6 @@ export default function App() {
     }
   };
 
-  // If in quiz tab mode, display the full GameShowQuiz
   if (currentView === 'quiz') {
     return (
       <GameShowQuiz
@@ -91,11 +87,7 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-white selection:bg-amber-400 selection:text-black font-sans antialiased overflow-x-hidden">
-      {/* 
-        FIXED FULL-SITE BACKGROUND:
-        The exact painterly space video requested plays seamlessly behind the entire website as you scroll.
-        Video: planet, mint-green flames, moons, asteroids, satellites, and violet cumulus clouds.
-      */}
+      {/* Background celestial video */}
       <div className="fixed inset-0 w-full h-full -z-20 overflow-hidden pointer-events-none bg-black">
         <video
           className="absolute inset-0 w-full h-full object-cover"
@@ -106,79 +98,43 @@ export default function App() {
           muted
           playsInline
         />
-        {/* Subtle glass atmospheric gradient to ensure high readability of text while keeping the artwork vibrant */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/85 pointer-events-none" />
       </div>
 
-      {/* 1. Hero Section */}
-      <HeroSection
-        onStartChat={() => setIsChatOpen(true)}
-        onExploreTopic={handleExploreTopic}
-      />
+      {/* Hero Section */}
+      <HeroSection onExploreTopic={handleExploreTopic} />
 
-      {/* Anchor for smooth scroll from hero */}
-      <div id="presentation-entry" className="pt-6" />
+      {/* Anchor for smooth scroll */}
+      <div id="presentation-entry" className="pt-4" />
 
-      {/* 2. Interactive Presentation Sticky Navigation Bar */}
+      {/* Presentation Sticky Navigation */}
       <PresentationNav
-        currentSlide={activeSlideNumber}
-        totalSlides={14}
         onOpenDeckView={() => setIsDeckOpen(true)}
         onOpenExamSprint={handleOpenExamSprint}
       />
 
-      {/* 3. Main Presentation Sections with Glassmorphism, Parallax & 3D Interactive Components */}
-      <main className="relative z-10 space-y-12 pb-16">
-        {/* Slide 1 & 3: Core Concept (Denotation vs Connotation) */}
+      {/* Main Sections */}
+      <main className="relative z-10 space-y-6 pb-16">
         <CoreConcept />
-
-        {/* Slide 2: Same man. Same room. (Shuffled vs Strode) */}
         <SentenceContrast />
-
-        {/* Slides 4 & 5: Sort the Feeling (Interactive Drag/Click Sorting Lab) */}
         <SortTheFeeling />
-
-        {/* Slide 6: Same death, three attitudes. (3D Pop-out Shapes) */}
         <ThreeAttitudes />
-
-        {/* Slide 7: Semantic Fields & Moods (Cumulative Atmosphere & Secret Note) */}
         <SemanticAtmosphere />
-
-        {/* Slide 8: The Orwellian Anomaly (Clock Striking Thirteen) */}
         <OrwellClock />
-
-        {/* Slides 9 & 12: Word Class Power: Verbs & Adjectives (F1 Speed & Skinny to Slender) */}
         <VerbPower />
-
-        {/* Slide 10: Vocabulary Showdown (Wave Energy Simulator) */}
         <WaveShowdown />
-
-        {/* Slide 11: Exam Sprint (3:00 Live Timer & 0/3 Rubric) */}
         <ExamSprint />
-
-        {/* Slides 12 & 13: Answer Key & Practice Deck (Exam advice) */}
         <AnswerKeyPractice />
-
-        {/* Slide 14: Credits & The Live Game Show Quiz button */}
         <PresentationCredits
           onOpenDeckView={() => setIsDeckOpen(true)}
-          onOpenQuiz={() => {
-            // Can be opened in new tab or current tab
-          }}
         />
       </main>
 
-      {/* Interactive 14-Slide Presentation Deck Modal */}
+      {/* Slide Deck Modal */}
       <SlideDeckModal
         isOpen={isDeckOpen}
         onClose={() => setIsDeckOpen(false)}
         initialSlide={1}
-      />
-
-      {/* Interactive Chat Assistant Modal */}
-      <ChatModal
-        isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
       />
     </div>
   );
